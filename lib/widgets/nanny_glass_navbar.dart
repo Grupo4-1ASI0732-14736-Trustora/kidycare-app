@@ -25,13 +25,11 @@ class NannyGlassNavbar extends StatelessWidget {
         child: BottomNavigationBar(
           currentIndex: selectedIndex,
           onTap: onItemSelected,
-          backgroundColor: theme.colorScheme.surface.withOpacity(0.8),
+          backgroundColor: theme.colorScheme.primary.withOpacity(0.15),
           elevation: 0,
           type: BottomNavigationBarType.fixed,
           selectedItemColor: theme.colorScheme.primary,
-          unselectedItemColor: theme.colorScheme.onSurface.withOpacity(0.6),
-          selectedFontSize: 12,
-          unselectedFontSize: 10,
+          unselectedItemColor: theme.colorScheme.onBackground.withOpacity(0.6),
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.dashboard_outlined),
