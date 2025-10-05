@@ -101,12 +101,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     icon: Icons.logout,
                     title: "Cerrar sesión",
                     subtitle: "Salir de la aplicación",
-                    onTap: () {},
+                    onTap: () => _showLogoutConfirmation(context),
                     theme: theme,
                     isDestructive: true,
                   ),
 
-                  const SizedBox(height: 100), // Espacio para navbar
+                  const SizedBox(height: 55), // Espacio para navbar
                 ],
               ),
             ),
@@ -342,6 +342,88 @@ class _ProfileScreenState extends State<ProfileScreen> {
         tileColor: isDestructive ? Colors.transparent : theme.colorScheme.surface,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       ),
+    );
+  }
+
+  void _showLogoutConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          title: Text(
+            "Cerrar sesión",
+            style: GoogleFonts.poppins(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+          content: Text(
+            "¿Estás seguro de que deseas cerrar sesión?",
+            style: GoogleFonts.poppins(
+              fontSize: 14,
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+            ),
+          ),
+          actions: [
+            // Botón Cancelar con fondo beige claro
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el diálogo
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: const Color(0xFFfef6e4), // Beige claro
+                foregroundColor: Theme.of(context).colorScheme.primary,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                overlayColor: const Color(0xFFf582ae), // Rosa fuerte para hover
+              ),
+              child: Text(
+                "Cancelar",
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            // Botón Cerrar sesión con fondo rosa fuerte
+            TextButton(
+              onPressed: () {
+                // Cerrar sesión y navegar al login
+                Navigator.of(context).pop(); // Cerrar el diálogo
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/login',
+                  (route) => false,
+                );
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: const Color(0xFFf582ae), // Rosa fuerte
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                overlayColor: const Color(0xFF001858), // Azul marino para hover
+              ),
+              child: Text(
+                "Cerrar sesión",
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        );
+      },
     );
   }
 }

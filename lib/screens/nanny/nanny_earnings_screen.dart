@@ -117,166 +117,166 @@ class _NannyEarningsScreenState extends State<NannyEarningsScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          // Header con selector de período
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.primary,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Header con selector de período
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primary,
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
               ),
-            ),
-            child: Column(
-              children: [
-                // Selector de período
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: _selectedPeriod,
-                      items: _periods.map((period) {
-                        return DropdownMenuItem(
-                          value: period,
-                          child: Text(
-                            period,
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
+              child: Column(
+                children: [
+                  // Selector de período
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: _selectedPeriod,
+                        items: _periods.map((period) {
+                          return DropdownMenuItem(
+                            value: period,
+                            child: Text(
+                              period,
+                              style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedPeriod = value!;
-                        });
-                      },
-                      dropdownColor: theme.colorScheme.primary,
-                      icon: Icon(Icons.keyboard_arrow_down, color: Colors.white),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                // Total ganado
-                Text(
-                  'S/${currentData['total'].toStringAsFixed(0)}',
-                  style: GoogleFonts.poppins(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      currentData['cambio'] > 0 ? Icons.trending_up : Icons.trending_down,
-                      color: currentData['cambio'] > 0 ? Colors.green[300] : Colors.red[300],
-                      size: 16,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      '${currentData['cambio'].toStringAsFixed(1)}% vs período anterior',
-                      style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        color: Colors.white.withOpacity(0.9),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedPeriod = value!;
+                          });
+                        },
+                        dropdownColor: theme.colorScheme.primary,
+                        icon: Icon(Icons.keyboard_arrow_down, color: Colors.white),
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          // Estadísticas rápidas
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _buildStatCard(
-                    '${currentData['trabajos']}',
-                    'Trabajos completados',
-                    Icons.work,
-                    theme.colorScheme.primary,
-                    theme,
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildStatCard(
-                    '${currentData['horas']}h',
-                    'Horas trabajadas',
-                    Icons.access_time,
-                    theme.colorScheme.secondary,
-                    theme,
+
+                  const SizedBox(height: 20),
+
+                  // Total ganado
+                  Text(
+                    'S/${currentData['total'].toStringAsFixed(0)}',
+                    style: GoogleFonts.poppins(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildStatCard(
-                    'S/${currentData['promedio'].toStringAsFixed(0)}',
-                    'Tarifa promedio',
-                    Icons.monetization_on,
-                    Colors.green,
-                    theme,
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        currentData['cambio'] > 0 ? Icons.trending_up : Icons.trending_down,
+                        color: currentData['cambio'] > 0 ? Colors.green[300] : Colors.red[300],
+                        size: 16,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${currentData['cambio'].toStringAsFixed(1)}% vs período anterior',
+                        style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          color: Colors.white.withOpacity(0.9),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
 
-          // Métodos de pago más usados
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Métodos de pago populares',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.onSurface,
+            // Estadísticas rápidas
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _buildStatCard(
+                      '${currentData['trabajos']}',
+                      'Trabajos completados',
+                      Icons.work,
+                      theme.colorScheme.primary,
+                      theme,
+                    ),
                   ),
-                ),
-                TextButton(
-                  onPressed: () => _showPaymentMethods(theme),
-                  child: Text('Configurar'),
-                ),
-              ],
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _buildStatCard(
+                      '${currentData['horas']}h',
+                      'Horas trabajadas',
+                      Icons.access_time,
+                      theme.colorScheme.secondary,
+                      theme,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _buildStatCard(
+                      'S/${currentData['promedio'].toStringAsFixed(0)}',
+                      'Tarifa promedio',
+                      Icons.monetization_on,
+                      Colors.green,
+                      theme,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                Expanded(child: _buildPaymentMethodCard('Yape', '45%', Colors.purple, theme)),
-                const SizedBox(width: 8),
-                Expanded(child: _buildPaymentMethodCard('Plin', '30%', Colors.blue, theme)),
-                const SizedBox(width: 8),
-                Expanded(child: _buildPaymentMethodCard('Efectivo', '25%', Colors.green, theme)),
-              ],
+            // Métodos de pago más usados
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Métodos de pago populares',
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => _showPaymentMethods(theme),
+                    child: Text('Configurar'),
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  Expanded(child: _buildPaymentMethodCard('Yape', '45%', Colors.purple, theme)),
+                  const SizedBox(width: 8),
+                  Expanded(child: _buildPaymentMethodCard('Plin', '30%', Colors.blue, theme)),
+                  const SizedBox(width: 8),
+                  Expanded(child: _buildPaymentMethodCard('Efectivo', '25%', Colors.green, theme)),
+                ],
+              ),
+            ),
 
-          // Lista de pagos recientes
-          Expanded(
-            child: Container(
+            const SizedBox(height: 20),
+
+            // Lista de pagos recientes
+            Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -299,20 +299,14 @@ class _NannyEarningsScreenState extends State<NannyEarningsScreen> {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: _recentPayments.length,
-                      itemBuilder: (context, index) {
-                        final payment = _recentPayments[index];
-                        return _buildPaymentCard(payment, theme);
-                      },
-                    ),
-                  ),
+                  // Mostrar solo los primeros 3 pagos
+                  ...(_recentPayments.take(3).map((payment) => _buildPaymentCard(payment, theme)).toList()),
+                  const SizedBox(height: 80),
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -156,13 +156,18 @@ class _NannyCalendarScreenState extends State<NannyCalendarScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showBlockTimeDialog(theme),
-        backgroundColor: theme.colorScheme.secondary,
-        child: Icon(Icons.block, color: Colors.white),
-        tooltip: 'Bloquear horario',
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 60.0), // Espacio adicional del navbar
+        child: FloatingActionButton(
+          onPressed: () => _showBlockTimeDialog(theme),
+          backgroundColor: theme.colorScheme.secondary,
+          child: Icon(Icons.block, color: Colors.white),
+          tooltip: 'Bloquear horario',
+        ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
+
   }
 
   Widget _buildStatItem(String value, String label, Color color) {
@@ -265,6 +270,7 @@ class _NannyCalendarScreenState extends State<NannyCalendarScreen> {
     );
   }
 
+
   Widget _buildAppointmentsList(ThemeData theme) {
     final selectedDateKey = DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day);
     final appointments = _appointments[selectedDateKey] ?? [];
@@ -294,12 +300,16 @@ class _NannyCalendarScreenState extends State<NannyCalendarScreen> {
                 color: AppTheme.azulMarino.withValues(alpha: 0.5),
               ),
             ),
+            // Espacio adicional para evitar que el navbar tape el FloatingActionButton
+            const SizedBox(height: 100),
           ],
         ),
       );
     }
 
     return ListView.builder(
+      // Agregar padding inferior para evitar que el navbar tape el contenido
+      padding: const EdgeInsets.only(bottom: 100),
       itemCount: appointments.length,
       itemBuilder: (context, index) {
         final appointment = appointments[index];

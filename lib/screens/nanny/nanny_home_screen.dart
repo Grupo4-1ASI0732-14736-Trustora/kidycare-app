@@ -74,7 +74,7 @@ class _NannyHomeScreenState extends State<NannyHomeScreen> {
                 _buildTodaySection(theme),
                 const SizedBox(height: 24),
                 _buildNewRequestsSection(theme),
-                const SizedBox(height: 80), // Espacio para el navbar
+                const SizedBox(height: 10), // Espacio para el navbar
               ],
             ),
           ),

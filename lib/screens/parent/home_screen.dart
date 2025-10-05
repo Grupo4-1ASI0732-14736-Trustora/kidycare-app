@@ -205,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               }),
 
-              const SizedBox(height: 100), // Espacio para el navbar
+              const SizedBox(height: 5), // Espacio para el navbar
             ],
           ),
         ),
