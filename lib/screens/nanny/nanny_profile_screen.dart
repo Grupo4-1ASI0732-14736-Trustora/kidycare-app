@@ -182,11 +182,14 @@ class _NannyProfileScreenState extends State<NannyProfileScreen> {
             return AnimatedOpacity(
               opacity: isCollapsed ? 1.0 : 0.0,
               duration: const Duration(milliseconds: 200),
-              child: Text(
-                'María Elena Rodríguez',
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Text(
+                  'María Elena Rodríguez',
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             );

@@ -195,11 +195,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             return AnimatedOpacity(
               opacity: isCollapsed ? 1.0 : 0.0,
               duration: const Duration(milliseconds: 200),
-              child: Text(
-                _userProfile['name'],
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Text(
+                  _userProfile['name'],
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             );
