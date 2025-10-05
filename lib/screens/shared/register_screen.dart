@@ -49,24 +49,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    // 🚀 Logo animado
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 800),
+                      curve: Curves.easeOutBack,
+                      width: 80,
+                      height: 80,
+                      child: Center(
+                        child: Image.asset(
+                          'assets/images/logo_kc.png',
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
                     // Título
                     Text(
                       "Crear Cuenta",
                       style: GoogleFonts.poppins(
-                        fontSize: 28,
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: theme.colorScheme.primary,
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
                     Text(
                       "Únete a la comunidad KidyCare",
                       style: GoogleFonts.poppins(
-                        fontSize: 14,
+                        fontSize: 13,
                         color: theme.colorScheme.onSurface.withOpacity(0.6),
                       ),
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 20),
 
                     // Selector de tipo de usuario
                     Container(

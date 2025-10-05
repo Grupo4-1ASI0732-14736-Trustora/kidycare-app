@@ -42,50 +42,37 @@ class _LoginScreenState extends State<LoginScreen> {
                     AnimatedContainer(
                       duration: const Duration(milliseconds: 800),
                       curve: Curves.easeOutBack,
-                      width: 110,
-                      height: 110,
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.primary,
-                        borderRadius: BorderRadius.circular(30),
-                        boxShadow: [
-                          BoxShadow(
-                            color: theme.colorScheme.primary.withOpacity(0.4),
-                            blurRadius: 12,
-                            offset: const Offset(0, 6),
-                          ),
-                        ],
-                      ),
+                      width: 80,
+                      height: 80,
                       child: Center(
-                        child: Text(
-                          "LOGO",
-                          style: GoogleFonts.poppins(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                        child: Image.asset(
+                          'assets/images/logo_kc.png',
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 20),
 
                     // 👋 Títulos
                     Text(
                       "Bienvenido a KidyCare",
                       style: GoogleFonts.poppins(
-                        fontSize: 22,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: theme.colorScheme.primary,
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
                     Text(
                       "Conéctate con niñeras de confianza",
                       style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        color: theme.colorScheme.onSurface.withOpacity(0.6),
+                        fontSize: 13,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       ),
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 24),
 
                     // Selector de tipo de usuario
                     Container(

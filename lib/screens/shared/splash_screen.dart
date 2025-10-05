@@ -65,19 +65,25 @@ class _SplashScreenState extends State<SplashScreen>
                   borderRadius: BorderRadius.circular(30),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 15,
-                      offset: const Offset(0, 8),
+                      color: Colors.black.withValues(alpha: 0.08),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                    BoxShadow(
+                      color: Colors.white.withValues(alpha: 0.6),
+                      blurRadius: 2,
+                      offset: const Offset(0, -1),
                     ),
                   ],
                 ),
                 child: Center(
-                  child: Text(
-                    "LOGO",
-                    style: GoogleFonts.poppins(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.primary,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset(
+                      'assets/images/logo_kc.png',
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.contain,
                     ),
                   ),
                 ),
@@ -102,7 +108,7 @@ class _SplashScreenState extends State<SplashScreen>
                 "Cuidado confiable para tus pequeños",
                 style: GoogleFonts.poppins(
                   fontSize: 16,
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withValues(alpha: 0.9),
                 ),
               ),
             ),
