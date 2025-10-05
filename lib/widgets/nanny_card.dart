@@ -8,6 +8,8 @@ class NannyCard extends StatelessWidget {
   final String price;
   final String imageUrl;
   final bool isFavorite;
+  final String? location;
+  final List<String>? services;
   final VoidCallback? onTap;
   final VoidCallback? onFavoriteToggle;
 
@@ -19,6 +21,8 @@ class NannyCard extends StatelessWidget {
     required this.price,
     required this.imageUrl,
     this.isFavorite = false,
+    this.location,
+    this.services,
     this.onTap,
     this.onFavoriteToggle,
   });
@@ -80,6 +84,51 @@ class NannyCard extends StatelessWidget {
                       color: theme.colorScheme.onSurface.withOpacity(0.6),
                     ),
                   ),
+                  if (location != null) ...[
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          size: 12,
+                          color: theme.colorScheme.primary,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          location!,
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: theme.colorScheme.primary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                  if (services != null && services!.isNotEmpty) ...[
+                    const SizedBox(height: 6),
+                    Wrap(
+                      spacing: 4,
+                      runSpacing: 4,
+                      children: services!.take(2).map((service) {
+                        return Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primary.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            service,
+                            style: GoogleFonts.poppins(
+                              fontSize: 10,
+                              color: theme.colorScheme.primary,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
                   const SizedBox(height: 8),
                   Row(
                     children: [

@@ -72,139 +72,158 @@ class _SearchScreenState extends State<SearchScreen> {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header
-              Text(
-                "Buscar niñeras",
-                style: GoogleFonts.poppins(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: theme.colorScheme.onSurface,
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // Barra de búsqueda
-              CustomSearchBar(
-                hintText: "Buscar por nombre, ubicación o servicio...",
-                controller: _searchController,
-                onChanged: _performSearch,
-                onFilterTap: () {
-                  // Implementar filtros
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Filtros próximamente")),
-                  );
-                },
-              ),
-
-              const SizedBox(height: 20),
-
-              // Resultados de búsqueda
-              Expanded(
-                child: _buildSearchResults(),
-              ),
-
-              const SizedBox(height: 100), // Espacio para el navbar
-            ],
+      appBar: AppBar(
+        title: Text(
+          'Buscar Niñeras',
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
         ),
+        backgroundColor: theme.colorScheme.primary,
+        elevation: 0,
+        automaticallyImplyLeading: false,
       ),
-    );
-  }
-
-  Widget _buildSearchResults() {
-    final theme = Theme.of(context);
-
-    if (!_isSearching) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.search,
-              size: 80,
-              color: theme.colorScheme.primary.withOpacity(0.3),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              "Busca niñeras por nombre,\nubicación o tipo de servicio",
-              textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(
-                fontSize: 16,
-                color: theme.colorScheme.onSurface.withOpacity(0.6),
+      body: Column(
+        children: [
+          // Header con franja de color
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary,
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
               ),
             ),
-          ],
-        ),
-      );
-    }
-
-    if (_searchResults.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.search_off,
-              size: 80,
-              color: theme.colorScheme.primary.withOpacity(0.3),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Encuentra la niñera perfecta",
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  "Busca por nombre, ubicación o servicios",
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    color: Colors.white.withOpacity(0.8),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // Barra de búsqueda
+                CustomSearchBar(
+                  controller: _searchController,
+                  hintText: "Buscar niñeras...",
+                  onChanged: _performSearch,
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            Text(
-              "No se encontraron resultados",
-              style: GoogleFonts.poppins(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: theme.colorScheme.onSurface,
+          ),
+
+          // Contenido principal
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header
+                  if (!_isSearching) ...[
+                    Text(
+                      "Sugerencias para ti",
+                      style: GoogleFonts.poppins(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      "Prueba buscando por ubicación como 'Miraflores' o por servicios como 'emergencia'",
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        color: theme.colorScheme.onSurface.withOpacity(0.6),
+                      ),
+                    ),
+                  ] else ...[
+                    Text(
+                      "Resultados de búsqueda (${_searchResults.length})",
+                      style: GoogleFonts.poppins(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Expanded(
+                      child: _searchResults.isEmpty
+                          ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.search_off,
+                                    size: 64,
+                                    color: theme.colorScheme.onSurface.withOpacity(0.3),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Text(
+                                    "No se encontraron resultados",
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: theme.colorScheme.onSurface.withOpacity(0.6),
+                                    ),
+                                  ),
+                                  Text(
+                                    "Intenta con otros términos de búsqueda",
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      color: theme.colorScheme.onSurface.withOpacity(0.4),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : ListView.builder(
+                              itemCount: _searchResults.length,
+                              itemBuilder: (context, index) {
+                                final nanny = _searchResults[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 16),
+                                  child: NannyCard(
+                                    name: nanny['name'],
+                                    experience: nanny['experience'],
+                                    rating: nanny['rating'],
+                                    price: nanny['price'],
+                                    imageUrl: nanny['imageUrl'],
+                                    isFavorite: nanny['isFavorite'],
+                                    location: nanny['location'],
+                                    services: List<String>.from(nanny['services']),
+                                    onFavoriteToggle: () {
+                                      setState(() {
+                                        nanny['isFavorite'] = !nanny['isFavorite'];
+                                      });
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                    ),
+                  ],
+                ],
               ),
             ),
-            Text(
-              "Intenta con otros términos de búsqueda",
-              style: GoogleFonts.poppins(
-                fontSize: 14,
-                color: theme.colorScheme.onSurface.withOpacity(0.6),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    return ListView.builder(
-      itemCount: _searchResults.length,
-      itemBuilder: (context, index) {
-        final nanny = _searchResults[index];
-        return NannyCard(
-          name: nanny['name'],
-          experience: nanny['experience'],
-          rating: nanny['rating'],
-          price: nanny['price'],
-          imageUrl: nanny['imageUrl'],
-          isFavorite: nanny['isFavorite'],
-          onTap: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Ver perfil de ${nanny['name']}")),
-            );
-          },
-          onFavoriteToggle: () {
-            setState(() {
-              final originalIndex = _allNannies.indexWhere(
-                  (original) => original['name'] == nanny['name']);
-              if (originalIndex != -1) {
-                _allNannies[originalIndex]['isFavorite'] =
-                    !nanny['isFavorite'];
-                _searchResults[index]['isFavorite'] = !nanny['isFavorite'];
-              }
-            });
-          },
-        );
-      },
+          ),
+        ],
+      ),
     );
   }
 }
