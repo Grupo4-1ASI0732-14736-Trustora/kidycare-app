@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // 🎨 Nueva paleta de colores
+   // 🎨 Nueva paleta de colores
   static const Color beigeClaro = Color(0xFFFEF6E4);      // #fef6e4
   static const Color rosaFuerte = Color(0xFFF582AE);      // #f582ae
   static const Color azulCeleste = Color(0xFF3B43DD);     // #3b43dd

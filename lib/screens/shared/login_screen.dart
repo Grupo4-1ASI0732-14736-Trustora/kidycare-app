@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../widgets/custom_button.dart';
 import '../../models/user_model.dart';
 import '../../core/services/auth_service.dart';
+import '../../core/theme/app_theme.dart';
 import '../parent/home_screen.dart';
 import '../nanny/nanny_home_screen.dart';
 import 'register_screen.dart';
@@ -102,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       size: 18,
                                       color: _selectedRole == UserRole.parent
                                           ? Colors.white
-                                          : theme.colorScheme.onSurface.withOpacity(0.6),
+                                          : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
@@ -112,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         fontWeight: FontWeight.w600,
                                         color: _selectedRole == UserRole.parent
                                             ? Colors.white
-                                            : theme.colorScheme.onSurface.withOpacity(0.6),
+                                            : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                                       ),
                                     ),
                                   ],
@@ -139,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       size: 18,
                                       color: _selectedRole == UserRole.nanny
                                           ? Colors.white
-                                          : theme.colorScheme.onSurface.withOpacity(0.6),
+                                          : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
@@ -149,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         fontWeight: FontWeight.w600,
                                         color: _selectedRole == UserRole.nanny
                                             ? Colors.white
-                                            : theme.colorScheme.onSurface.withOpacity(0.6),
+                                            : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                                       ),
                                     ),
                                   ],
@@ -231,18 +232,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     // Separador con texto
                     Row(
                       children: [
-                        Expanded(child: Divider(color: Colors.grey[300])),
+                        Expanded(child: Divider(color: AppTheme.azulMarino.withValues(alpha: 0.3))),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
                             "O logéate con",
                             style: GoogleFonts.poppins(
-                              color: Colors.grey[600],
+                              color: AppTheme.azulMarino.withValues(alpha: 0.6),
                               fontSize: 14,
                             ),
                           ),
                         ),
-                        Expanded(child: Divider(color: Colors.grey[300])),
+                        Expanded(child: Divider(color: AppTheme.azulMarino.withValues(alpha: 0.3))),
                       ],
                     ),
 
@@ -266,7 +267,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: Colors.white,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
+                                color: AppTheme.azulMarino.withValues(alpha: 0.1),
                                 blurRadius: 8,
                                 offset: const Offset(0, 2),
                               ),
@@ -317,6 +318,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     setState(() => _isLoading = true);
 
+    final theme = Theme.of(context); // Agregar esta línea para obtener el theme
+
     try {
       final success = await AuthService.login(
         _emailController.text,
@@ -339,9 +342,9 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       } else if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text('Credenciales incorrectas'),
-            backgroundColor: Colors.red,
+            backgroundColor: theme.colorScheme.secondary,
           ),
         );
       }

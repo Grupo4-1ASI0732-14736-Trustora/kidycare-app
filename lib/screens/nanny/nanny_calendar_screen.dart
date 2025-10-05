@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../core/theme/app_theme.dart';
 
 class NannyCalendarScreen extends StatefulWidget {
   const NannyCalendarScreen({super.key});
@@ -180,7 +181,7 @@ class _NannyCalendarScreenState extends State<NannyCalendarScreen> {
           textAlign: TextAlign.center,
           style: GoogleFonts.poppins(
             fontSize: 10,
-            color: color.withOpacity(0.8),
+            color: color.withValues(alpha: 0.8),
           ),
         ),
       ],
@@ -190,7 +191,6 @@ class _NannyCalendarScreenState extends State<NannyCalendarScreen> {
   Widget _buildCalendarGrid(ThemeData theme) {
     final now = DateTime.now();
     final firstDayOfMonth = DateTime(now.year, now.month, 1);
-    final lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
     final startDate = firstDayOfMonth.subtract(Duration(days: firstDayOfMonth.weekday - 1));
 
     return Column(
@@ -205,7 +205,7 @@ class _NannyCalendarScreenState extends State<NannyCalendarScreen> {
                   style: GoogleFonts.poppins(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.onSurface.withOpacity(0.6),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                 ),
               ),
@@ -234,7 +234,7 @@ class _NannyCalendarScreenState extends State<NannyCalendarScreen> {
                       color: isSelected
                           ? theme.colorScheme.primary
                           : isToday
-                              ? theme.colorScheme.primary.withOpacity(0.1)
+                              ? theme.colorScheme.primary.withValues(alpha: 0.1)
                               : null,
                       borderRadius: BorderRadius.circular(8),
                       border: hasAppointments && !isSelected
@@ -251,7 +251,7 @@ class _NannyCalendarScreenState extends State<NannyCalendarScreen> {
                               ? Colors.white
                               : isCurrentMonth
                                   ? theme.colorScheme.onSurface
-                                  : theme.colorScheme.onSurface.withOpacity(0.3),
+                                  : theme.colorScheme.onSurface.withValues(alpha: 0.3),
                         ),
                       ),
                     ),
@@ -277,21 +277,21 @@ class _NannyCalendarScreenState extends State<NannyCalendarScreen> {
             Icon(
               Icons.free_breakfast,
               size: 48,
-              color: Colors.grey[400],
+              color: AppTheme.azulMarino.withValues(alpha: 0.4),
             ),
             const SizedBox(height: 16),
             Text(
               'No hay citas programadas',
               style: GoogleFonts.poppins(
                 fontSize: 16,
-                color: Colors.grey[600],
+                color: AppTheme.azulMarino.withValues(alpha: 0.6),
               ),
             ),
             Text(
               'Disfruta tu día libre',
               style: GoogleFonts.poppins(
                 fontSize: 14,
-                color: Colors.grey[500],
+                color: AppTheme.azulMarino.withValues(alpha: 0.5),
               ),
             ),
           ],
@@ -318,12 +318,12 @@ class _NannyCalendarScreenState extends State<NannyCalendarScreen> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: isConfirmed ? theme.colorScheme.primary : Colors.orange,
+          color: isConfirmed ? theme.colorScheme.primary : theme.colorScheme.secondary,
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: theme.colorScheme.primary.withOpacity(0.1),
+            color: theme.colorScheme.primary.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -372,13 +372,13 @@ class _NannyCalendarScreenState extends State<NannyCalendarScreen> {
                     style: GoogleFonts.poppins(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.green,
+                      color: theme.colorScheme.primary,
                     ),
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
-                      color: isConfirmed ? Colors.green[100] : Colors.orange[100],
+                      color: isConfirmed ? AppTheme.rosaClaro : AppTheme.rosaClaro.withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
@@ -386,7 +386,7 @@ class _NannyCalendarScreenState extends State<NannyCalendarScreen> {
                       style: GoogleFonts.poppins(
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
-                        color: isConfirmed ? Colors.green[700] : Colors.orange[700],
+                        color: theme.colorScheme.secondary,
                       ),
                     ),
                   ),
@@ -399,18 +399,18 @@ class _NannyCalendarScreenState extends State<NannyCalendarScreen> {
 
           Row(
             children: [
-              Icon(Icons.child_care, size: 14, color: Colors.grey[600]),
+              Icon(Icons.child_care, size: 14, color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
               const SizedBox(width: 4),
               Text(
                 '${appointment['children']} ${appointment['children'] == 1 ? 'niño' : 'niños'}',
-                style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey[600]),
+                style: GoogleFonts.poppins(fontSize: 12, color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
               ),
               const SizedBox(width: 16),
-              Icon(Icons.location_on, size: 14, color: Colors.grey[600]),
+              Icon(Icons.location_on, size: 14, color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
               const SizedBox(width: 4),
               Text(
                 appointment['location'],
-                style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey[600]),
+                style: GoogleFonts.poppins(fontSize: 12, color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
               ),
             ],
           ),
@@ -420,7 +420,7 @@ class _NannyCalendarScreenState extends State<NannyCalendarScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: theme.colorScheme.secondary.withOpacity(0.1),
+              color: theme.colorScheme.secondary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(6),
             ),
             child: Text(
@@ -606,7 +606,7 @@ class _NannyCalendarScreenState extends State<NannyCalendarScreen> {
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: Colors.grey[300],
+                    color: AppTheme.azulMarino.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),

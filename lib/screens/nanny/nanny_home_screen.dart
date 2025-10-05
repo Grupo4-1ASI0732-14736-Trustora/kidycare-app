@@ -150,7 +150,7 @@ class _NannyHomeScreenState extends State<NannyHomeScreen> {
                   ] else ...[
                     Icon(
                       Icons.info_outline,
-                      color: Colors.orange,
+                      color: theme.colorScheme.secondary,
                       size: 16,
                     ),
                     const SizedBox(width: 4),
@@ -158,7 +158,7 @@ class _NannyHomeScreenState extends State<NannyHomeScreen> {
                       'Completar verificación',
                       style: GoogleFonts.poppins(
                         fontSize: 14,
-                        color: Colors.orange,
+                        color: theme.colorScheme.secondary,
                       ),
                     ),
                   ],
@@ -383,7 +383,7 @@ class _NannyHomeScreenState extends State<NannyHomeScreen> {
                 decoration: BoxDecoration(
                   color: appointment['status'] == 'confirmed'
                     ? AppTheme.rosaClaro
-                    : Colors.orange.shade100,
+                    : AppTheme.rosaClaro.withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -393,7 +393,7 @@ class _NannyHomeScreenState extends State<NannyHomeScreen> {
                     fontWeight: FontWeight.w600,
                     color: appointment['status'] == 'confirmed'
                       ? theme.colorScheme.secondary
-                      : Colors.orange.shade700,
+                      : theme.colorScheme.secondary,
                   ),
                 ),
               ),
@@ -581,14 +581,14 @@ class _NannyHomeScreenState extends State<NannyHomeScreen> {
           Icon(
             icon,
             size: 48,
-            color: Colors.grey.shade400,
+            color: AppTheme.azulMarino.withValues(alpha: 0.4),
           ),
           const SizedBox(height: 16),
           Text(
             message,
             textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
-              color: Colors.grey.shade600,
+              color: AppTheme.azulMarino.withValues(alpha: 0.6),
               fontSize: 14,
             ),
           ),
