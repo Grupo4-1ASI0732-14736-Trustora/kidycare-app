@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'core/theme/app_theme.dart';
-import 'screens/splash_screen.dart';
-import 'screens/onboarding_screen.dart';
-import 'screens/login_screen.dart';
-import 'screens/home_screen.dart';
+import 'screens/shared/splash_screen.dart';
+import 'screens/shared/onboarding_screen.dart';
+import 'screens/shared/login_screen.dart';
 
 void main() {
   runApp(const KidyCareApp());
@@ -27,7 +26,6 @@ class KidyCareApp extends StatelessWidget {
         "/splash": (_) => const SplashScreen(),
         "/onboarding": (_) => const OnboardingScreen(),
         "/login": (_) => const LoginScreen(),
-        "/home": (_) => const HomeScreen(),
       },
     );
   }

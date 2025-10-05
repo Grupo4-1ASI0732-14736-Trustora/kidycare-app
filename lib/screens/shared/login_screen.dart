@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../widgets/custom_button.dart';
-import 'home_screen.dart';
+import '../../widgets/custom_button.dart';
+import '../../models/user_model.dart';
+import '../../core/services/auth_service.dart';
+import '../parent/home_screen.dart';
+import '../nanny/nanny_home_screen.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,14 +16,18 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool _isObscure = true;
+  UserRole _selectedRole = UserRole.parent;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -75,13 +82,103 @@ class _LoginScreenState extends State<LoginScreen> {
                       "Conéctate con niñeras de confianza",
                       style: GoogleFonts.poppins(
                         fontSize: 14,
-                        color: theme.colorScheme.onBackground.withOpacity(0.6),
+                        color: theme.colorScheme.onSurface.withOpacity(0.6),
                       ),
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 30),
+
+                    // Selector de tipo de usuario
+                    Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () => setState(() => _selectedRole = UserRole.parent),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                decoration: BoxDecoration(
+                                  color: _selectedRole == UserRole.parent
+                                      ? theme.colorScheme.primary
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.family_restroom,
+                                      size: 18,
+                                      color: _selectedRole == UserRole.parent
+                                          ? Colors.white
+                                          : theme.colorScheme.onSurface.withOpacity(0.6),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'Padre/Madre',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: _selectedRole == UserRole.parent
+                                            ? Colors.white
+                                            : theme.colorScheme.onSurface.withOpacity(0.6),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () => setState(() => _selectedRole = UserRole.nanny),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                decoration: BoxDecoration(
+                                  color: _selectedRole == UserRole.nanny
+                                      ? theme.colorScheme.secondary
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.child_care,
+                                      size: 18,
+                                      color: _selectedRole == UserRole.nanny
+                                          ? Colors.white
+                                          : theme.colorScheme.onSurface.withOpacity(0.6),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'Niñera',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: _selectedRole == UserRole.nanny
+                                            ? Colors.white
+                                            : theme.colorScheme.onSurface.withOpacity(0.6),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 30),
 
                     // 📧 Email
                     TextFormField(
+                      controller: _emailController,
                       decoration: InputDecoration(
                         labelText: "Correo electrónico",
                         prefixIcon: const Icon(Icons.email_outlined),
@@ -103,6 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     // 🔒 Password con mostrar/ocultar
                     TextFormField(
+                      controller: _passwordController,
                       obscureText: _isObscure,
                       decoration: InputDecoration(
                         labelText: "Contraseña",
@@ -135,17 +233,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width * 0.7,
                         child: CustomButton(
-                          text: "Ingresar",
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const HomeScreen(),
-                                ),
-                              );
-                            }
-                          },
+                          text: _isLoading ? "Iniciando sesión..." : "Ingresar",
+                          onPressed: _isLoading ? null : _handleLogin,
                         ),
                       ),
                     ),
@@ -234,5 +323,51 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  void _handleLogin() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _isLoading = true);
+
+    try {
+      final success = await AuthService.login(
+        _emailController.text,
+        _passwordController.text,
+        _selectedRole,
+      );
+
+      if (success && mounted) {
+        // Navegar según el rol del usuario autenticado
+        if (AuthService.isParent) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        } else if (AuthService.isNanny) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const NannyHomeScreen()),
+          );
+        }
+      } else if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Credenciales incorrectas'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al iniciar sesión: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
   }
 }
