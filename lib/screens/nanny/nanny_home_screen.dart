@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/theme/app_theme.dart';
+import '../../widgets/nanny_glass_navbar.dart';
+import 'nanny_calendar_screen.dart';
+import 'nanny_earnings_screen.dart';
+import 'nanny_profile_screen.dart';
 
 class NannyHomeScreen extends StatefulWidget {
   const NannyHomeScreen({super.key});
@@ -10,7 +14,7 @@ class NannyHomeScreen extends StatefulWidget {
 }
 
 class _NannyHomeScreenState extends State<NannyHomeScreen> {
-  bool _isAvailable = true;
+  int _selectedIndex = 0;
 
   final List<Map<String, dynamic>> _todayAppointments = [
     {
@@ -47,21 +51,9 @@ class _NannyHomeScreenState extends State<NannyHomeScreen> {
       'type': 'Cuidado + Tareas',
       'priority': 'high',
     },
-    {
-      'family': 'Familia Torres',
-      'date': 'Viernes',
-      'time': '19:00 - 00:00',
-      'children': 2,
-      'ages': '6 y 9 años',
-      'location': 'San Borja',
-      'payment': 'S/75',
-      'type': 'Noche especial',
-      'priority': 'medium',
-    },
   ];
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildHomePage() {
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -77,16 +69,12 @@ class _NannyHomeScreenState extends State<NannyHomeScreen> {
               children: [
                 _buildHeader(theme),
                 const SizedBox(height: 24),
-                _buildAvailabilityToggle(theme),
-                const SizedBox(height: 24),
                 _buildQuickStats(theme),
                 const SizedBox(height: 24),
                 _buildTodaySection(theme),
                 const SizedBox(height: 24),
                 _buildNewRequestsSection(theme),
-                const SizedBox(height: 24),
-                _buildQuickActions(theme),
-                const SizedBox(height: 100), // Espacio para el navbar
+                const SizedBox(height: 80), // Espacio para el navbar
               ],
             ),
           ),
@@ -95,12 +83,34 @@ class _NannyHomeScreenState extends State<NannyHomeScreen> {
     );
   }
 
+  // Método para obtener las páginas dinámicamente
+  List<Widget> get _pages => [
+    _buildHomePage(),
+    const NannyCalendarScreen(),
+    const NannyEarningsScreen(),
+    const NannyProfileScreen(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBody: true,
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: NannyGlassNavbar(
+        selectedIndex: _selectedIndex,
+        onItemSelected: (index) => setState(() => _selectedIndex = index),
+      ),
+    );
+  }
+
   Widget _buildHeader(ThemeData theme) {
+    final bool isVerified = true; // En una app real, esto vendría de la base de datos
+
     return Row(
       children: [
         CircleAvatar(
           radius: 25,
-          backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+          backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
           child: Icon(
             Icons.person,
             color: theme.colorScheme.primary,
@@ -120,12 +130,47 @@ class _NannyHomeScreenState extends State<NannyHomeScreen> {
                   color: theme.colorScheme.onSurface,
                 ),
               ),
-              Text(
-                'Niñera profesional ⭐ 4.9',
-                style: GoogleFonts.poppins(
-                  fontSize: 14,
-                  color: theme.colorScheme.onSurface.withOpacity(0.7),
-                ),
+              Row(
+                children: [
+                  if (isVerified) ...[
+                    Icon(
+                      Icons.verified,
+                      color: theme.colorScheme.primary,
+                      size: 16,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      'Niñera verificada',
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ] else ...[
+                    Icon(
+                      Icons.info_outline,
+                      color: Colors.orange,
+                      size: 16,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      'Completar verificación',
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        color: Colors.orange,
+                      ),
+                    ),
+                  ],
+                  const SizedBox(width: 8),
+                  Text(
+                    '⭐ 4.9',
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -138,61 +183,6 @@ class _NannyHomeScreenState extends State<NannyHomeScreen> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildAvailabilityToggle(ThemeData theme) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: _isAvailable ? AppTheme.rosaClaro : Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: _isAvailable ? theme.colorScheme.secondary : Colors.grey.shade300,
-          width: 1,
-        ),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            _isAvailable ? Icons.check_circle : Icons.schedule,
-            color: _isAvailable ? theme.colorScheme.secondary : Colors.grey,
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  _isAvailable ? 'Disponible para trabajar' : 'No disponible',
-                  style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.onSurface,
-                  ),
-                ),
-                Text(
-                  _isAvailable
-                    ? 'Los padres pueden enviarte solicitudes'
-                    : 'No recibirás nuevas solicitudes',
-                  style: GoogleFonts.poppins(
-                    fontSize: 12,
-                    color: theme.colorScheme.onSurface.withOpacity(0.6),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Switch(
-            value: _isAvailable,
-            onChanged: (value) {
-              setState(() {
-                _isAvailable = value;
-              });
-            },
-            activeColor: theme.colorScheme.secondary,
-          ),
-        ],
-      ),
     );
   }
 
@@ -240,7 +230,7 @@ class _NannyHomeScreenState extends State<NannyHomeScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -263,7 +253,7 @@ class _NannyHomeScreenState extends State<NannyHomeScreen> {
             textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
               fontSize: 10,
-              color: theme.colorScheme.onSurface.withOpacity(0.6),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ),
         ],
@@ -369,7 +359,7 @@ class _NannyHomeScreenState extends State<NannyHomeScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -439,7 +429,7 @@ class _NannyHomeScreenState extends State<NannyHomeScreen> {
                     '${appointment['location']} • ${appointment['distance']}',
                     style: GoogleFonts.poppins(
                       fontSize: 12,
-                      color: theme.colorScheme.onSurface.withOpacity(0.6),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
                   ),
                 ],
@@ -468,13 +458,13 @@ class _NannyHomeScreenState extends State<NannyHomeScreen> {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: request['priority'] == 'high'
-            ? theme.colorScheme.secondary.withOpacity(0.3)
+            ? theme.colorScheme.secondary.withValues(alpha: 0.3)
             : theme.colorScheme.outline,
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -533,7 +523,7 @@ class _NannyHomeScreenState extends State<NannyHomeScreen> {
                 request['location'],
                 style: GoogleFonts.poppins(
                   fontSize: 12,
-                  color: theme.colorScheme.onSurface.withOpacity(0.6),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
               ),
               Text(
@@ -582,85 +572,6 @@ class _NannyHomeScreenState extends State<NannyHomeScreen> {
     );
   }
 
-  Widget _buildQuickActions(ThemeData theme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Acciones rápidas',
-          style: GoogleFonts.poppins(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: theme.colorScheme.onSurface,
-          ),
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: _buildActionButton(
-                'Configurar\nDisponibilidad',
-                Icons.schedule,
-                theme.colorScheme.primary,
-                () {},
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _buildActionButton(
-                'Ver\nCalificaciones',
-                Icons.star,
-                theme.colorScheme.secondary,
-                () {},
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _buildActionButton(
-                'Soporte\nTécnico',
-                Icons.help_outline,
-                AppTheme.azulMarino,
-                () {},
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildActionButton(String title, IconData icon, Color color, VoidCallback onPressed) {
-    return Container(
-      height: 80,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: color.withOpacity(0.1),
-          foregroundColor: color,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 24),
-            const SizedBox(height: 4),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildEmptyState(String message, IconData icon) {
     return Container(
       width: double.infinity,
@@ -687,7 +598,6 @@ class _NannyHomeScreenState extends State<NannyHomeScreen> {
   }
 
   Future<void> _refreshData() async {
-    // Simular carga de datos
     await Future.delayed(const Duration(seconds: 1));
     setState(() {
       // Aquí actualizarías los datos reales

@@ -4,6 +4,7 @@ import 'core/theme/app_theme.dart';
 import 'screens/shared/splash_screen.dart';
 import 'screens/shared/onboarding_screen.dart';
 import 'screens/shared/login_screen.dart';
+import 'screens/nanny/nanny_home_screen.dart';
 
 void main() {
   runApp(const KidyCareApp());
@@ -26,6 +27,7 @@ class KidyCareApp extends StatelessWidget {
         "/splash": (_) => const SplashScreen(),
         "/onboarding": (_) => const OnboardingScreen(),
         "/login": (_) => const LoginScreen(),
+        "/nanny": (_) => const NannyHomeScreen(),
       },
     );
   }
