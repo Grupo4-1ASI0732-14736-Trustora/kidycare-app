@@ -98,6 +98,10 @@ class _NannyProfileScreenState extends State<NannyProfileScreen> {
                 theme.colorScheme.primary.withValues(alpha: 0.8),
               ],
             ),
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30),
+            ),
           ),
           child: SafeArea(
             child: Column(
@@ -166,6 +170,34 @@ class _NannyProfileScreenState extends State<NannyProfileScreen> {
               ],
             ),
           ),
+        ),
+        collapseMode: CollapseMode.pin,
+        titlePadding: EdgeInsets.zero,
+        title: LayoutBuilder(
+          builder: (context, constraints) {
+            // Solo mostrar el título cuando el AppBar esté completamente colapsado
+            final collapsedHeight = MediaQuery.of(context).padding.top + kToolbarHeight;
+            final isCollapsed = constraints.biggest.height <= collapsedHeight + 10;
+
+            return AnimatedOpacity(
+              opacity: isCollapsed ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 200),
+              child: Text(
+                'María Elena Rodríguez',
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            );
+          },
+        ),
+        centerTitle: true,
+      ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
         ),
       ),
       actions: [
@@ -529,48 +561,63 @@ class _NannyProfileScreenState extends State<NannyProfileScreen> {
         children: settingsItems.map((item) {
           final isDestructive = item['isDestructive'] as bool? ?? false;
 
-          return ListTile(
-            leading: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: (isDestructive
-                  ? Colors.red
-                  : theme.colorScheme.primary
-                ).withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
+          return Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            decoration: isDestructive ? BoxDecoration(
+              color: const Color(0xFFf582ae),
+              borderRadius: BorderRadius.circular(12),
+            ) : null,
+            child: ListTile(
+              leading: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: (isDestructive
+                    ? Colors.white
+                    : theme.colorScheme.primary
+                  ).withValues(alpha: isDestructive ? 1.0 : 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  item['icon'] as IconData,
+                  color: isDestructive
+                    ? const Color(0xFFf582ae)
+                    : theme.colorScheme.primary,
+                  size: 20,
+                ),
               ),
-              child: Icon(
-                item['icon'] as IconData,
+              title: Text(
+                item['title'] as String,
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w500,
+                  color: isDestructive
+                    ? Colors.white
+                    : theme.colorScheme.onSurface,
+                ),
+              ),
+              subtitle: Text(
+                item['subtitle'] as String,
+                style: GoogleFonts.poppins(
+                  fontSize: 12,
+                  color: isDestructive
+                    ? Colors.white.withValues(alpha: 0.8)
+                    : theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                ),
+              ),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
                 color: isDestructive
-                  ? Colors.red
-                  : theme.colorScheme.primary,
-                size: 20,
+                  ? Colors.white.withValues(alpha: 0.7)
+                  : theme.colorScheme.onSurface.withValues(alpha: 0.4),
               ),
-            ),
-            title: Text(
-              item['title'] as String,
-              style: GoogleFonts.poppins(
-                fontWeight: FontWeight.w500,
-                color: isDestructive
-                  ? Colors.red
-                  : theme.colorScheme.onSurface,
+              onTap: item['onTap'] as VoidCallback,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
+              tileColor: isDestructive ? Colors.transparent : null,
             ),
-            subtitle: Text(
-              item['subtitle'] as String,
-              style: GoogleFonts.poppins(
-                fontSize: 12,
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-              ),
-            ),
-            trailing: Icon(
-              Icons.arrow_forward_ios,
-              size: 16,
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-            ),
-            onTap: item['onTap'] as VoidCallback,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 0),
           );
         }).toList(),
       ),

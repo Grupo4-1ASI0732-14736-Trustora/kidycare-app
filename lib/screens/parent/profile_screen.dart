@@ -24,46 +24,135 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
-      appBar: AppBar(
-        title: Text(
-          'Mi Perfil',
-          style: GoogleFonts.poppins(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: theme.colorScheme.primary,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.settings, color: Colors.white),
-            tooltip: 'Configuración',
+      body: CustomScrollView(
+        slivers: [
+          _buildSliverAppBar(theme),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Información del perfil
+                  Text(
+                    "Información personal",
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  _buildInfoItem(
+                    icon: Icons.phone,
+                    title: "Teléfono",
+                    value: _userProfile['phone'],
+                    theme: theme,
+                  ),
+                  const SizedBox(height: 12),
+                  _buildInfoItem(
+                    icon: Icons.location_on,
+                    title: "Ubicación",
+                    value: _userProfile['location'],
+                    theme: theme,
+                  ),
+                  const SizedBox(height: 32),
+
+                  // Configuración
+                  Text(
+                    "Configuración",
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  _buildOptionItem(
+                    icon: Icons.edit,
+                    title: "Editar perfil",
+                    subtitle: "Actualiza tu información personal",
+                    onTap: () {},
+                    theme: theme,
+                  ),
+                  _buildOptionItem(
+                    icon: Icons.notifications,
+                    title: "Notificaciones",
+                    subtitle: "Configura tus preferencias",
+                    onTap: () {},
+                    theme: theme,
+                  ),
+                  _buildOptionItem(
+                    icon: Icons.security,
+                    title: "Privacidad y seguridad",
+                    subtitle: "Administra tu cuenta",
+                    onTap: () {},
+                    theme: theme,
+                  ),
+                  _buildOptionItem(
+                    icon: Icons.help,
+                    title: "Ayuda y soporte",
+                    subtitle: "¿Necesitas ayuda?",
+                    onTap: () {},
+                    theme: theme,
+                  ),
+                  _buildOptionItem(
+                    icon: Icons.logout,
+                    title: "Cerrar sesión",
+                    subtitle: "Salir de la aplicación",
+                    onTap: () {},
+                    theme: theme,
+                    isDestructive: true,
+                  ),
+
+                  const SizedBox(height: 100), // Espacio para navbar
+                ],
+              ),
+            ),
           ),
         ],
       ),
-      body: Column(
-        children: [
-          // Header con franja de color
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.primary,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
-              ),
+    );
+  }
+
+  Widget _buildSliverAppBar(ThemeData theme) {
+    return SliverAppBar(
+      expandedHeight: 280,
+      pinned: true,
+      backgroundColor: theme.colorScheme.primary,
+      automaticallyImplyLeading: false,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Container(
+          decoration: BoxDecoration(
+            color: theme.colorScheme.primary,
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30),
             ),
+          ),
+          child: SafeArea(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.white,
+                const SizedBox(height: 40),
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
                   child: Icon(
                     Icons.person,
-                    size: 40,
+                    size: 50,
                     color: theme.colorScheme.primary,
                   ),
                 ),
@@ -94,105 +183,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
           ),
+        ),
+        collapseMode: CollapseMode.pin,
+        titlePadding: EdgeInsets.zero,
+        title: LayoutBuilder(
+          builder: (context, constraints) {
+            // Solo mostrar el título cuando el AppBar esté completamente colapsado
+            final collapsedHeight = MediaQuery.of(context).padding.top + kToolbarHeight;
+            final isCollapsed = constraints.biggest.height <= collapsedHeight + 10;
 
-          // Contenido principal
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Información del perfil
-                  Text(
-                    "Información personal",
-                    style: GoogleFonts.poppins(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.onSurface,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildInfoItem(
-                    icon: Icons.phone,
-                    title: "Teléfono",
-                    value: _userProfile['phone'],
-                    theme: theme,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildInfoItem(
-                    icon: Icons.location_on,
-                    title: "Ubicación",
-                    value: _userProfile['location'],
-                    theme: theme,
-                  ),
-                  const SizedBox(height: 32),
-                  // Opciones del perfil
-                  Text(
-                    "Configuración",
-                    style: GoogleFonts.poppins(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.onSurface,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildOptionItem(
-                    icon: Icons.edit,
-                    title: "Editar perfil",
-                    subtitle: "Actualiza tu información personal",
-                    onTap: () {},
-                    theme: theme,
-                  ),
-                  _buildOptionItem(
-                    icon: Icons.notifications,
-                    title: "Notificaciones",
-                    subtitle: "Configura tus preferencias",
-                    onTap: () {},
-                    theme: theme,
-                  ),
-                  _buildOptionItem(
-                    icon: Icons.security,
-                    title: "Privacidad y seguridad",
-                    subtitle: "Administra tu cuenta",
-                    onTap: () {},
-                    theme: theme,
-                  ),
-                  _buildOptionItem(
-                    icon: Icons.help,
-                    title: "Ayuda y soporte",
-                    subtitle: "¿Necesitas ayuda?",
-                    onTap: () {},
-                    theme: theme,
-                  ),
-                  const SizedBox(height: 32),
-                  // Botón de cerrar sesión
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: theme.colorScheme.secondary,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Text(
-                        "Cerrar sesión",
-                        style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+            return AnimatedOpacity(
+              opacity: isCollapsed ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 200),
+              child: Text(
+                _userProfile['name'],
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-            ),
-          ),
-        ],
+            );
+          },
+        ),
+        centerTitle: true,
       ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+        ),
+      ),
+      actions: [
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.settings, color: Colors.white),
+          tooltip: 'Configuración',
+        ),
+      ],
     );
   }
 
@@ -253,20 +280,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required String subtitle,
     required VoidCallback onTap,
     required ThemeData theme,
+    bool isDestructive = false,
   }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
+      decoration: isDestructive ? BoxDecoration(
+        color: const Color(0xFFf582ae),
+        borderRadius: BorderRadius.circular(12),
+      ) : null,
       child: ListTile(
         onTap: onTap,
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: theme.colorScheme.primary.withOpacity(0.1),
+            color: (isDestructive
+                ? Colors.white
+                : theme.colorScheme.primary
+            ).withOpacity(isDestructive ? 1.0 : 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(
             icon,
-            color: theme.colorScheme.primary,
+            color: isDestructive
+                ? const Color(0xFFf582ae)
+                : theme.colorScheme.primary,
             size: 24,
           ),
         ),
@@ -275,25 +312,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: GoogleFonts.poppins(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: theme.colorScheme.onSurface,
+            color: isDestructive
+                ? Colors.white
+                : theme.colorScheme.onSurface,
           ),
         ),
         subtitle: Text(
           subtitle,
           style: GoogleFonts.poppins(
             fontSize: 14,
-            color: theme.colorScheme.onSurface.withOpacity(0.6),
+            color: isDestructive
+                ? Colors.white.withOpacity(0.8)
+                : theme.colorScheme.onSurface.withOpacity(0.6),
           ),
         ),
         trailing: Icon(
           Icons.arrow_forward_ios,
-          color: theme.colorScheme.onSurface.withOpacity(0.4),
+          color: isDestructive
+              ? Colors.white.withOpacity(0.7)
+              : theme.colorScheme.onSurface.withOpacity(0.4),
           size: 16,
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        tileColor: theme.colorScheme.surface,
+        tileColor: isDestructive ? Colors.transparent : theme.colorScheme.surface,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       ),
     );
   }
