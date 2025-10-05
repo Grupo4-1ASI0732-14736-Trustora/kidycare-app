@@ -1,16 +1,18 @@
-# kidycare
+# KidyCare
 
-Mobile app that connects parents with babysitters quickly, securely, and reliably.
+KidyCare es una aplicación móvil que conecta a padres con niñeras de forma rápida, segura y confiable.
 
-## Getting Started
+## Características principales
 
-This project is a starting point for a Flutter application.
+- Registro y autenticación de usuarios (padres y niñeras)
+- Búsqueda y filtrado de niñeras por ubicación y disponibilidad
+- Solicitud y gestión de servicios de cuidado infantil
+- Sistema de calificaciones y comentarios
 
-A few resources to get you started if this is your first Flutter project:
+## Tecnologías utilizadas
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Flutter (Dart)
+- Kotlin / Java (integraciones nativas Android)
+- C++ (componentes nativos)
+- Gradle (gestión de dependencias Android)
+- Pub (gestión de dependencias Flutter)
