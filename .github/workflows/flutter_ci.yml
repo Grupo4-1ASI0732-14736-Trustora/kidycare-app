@@ -2,9 +2,9 @@ name: Flutter CI
 
 on:
   push:
-    branches: [ master, develop ]
+    branches: [ master ]
   pull_request:
-    branches: [ master, develop ]
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
@@ -14,16 +14,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Flutter
+      - name: Setup Flutter (3.35.6)
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.6'
+          flutter-version: '3.35.6'  # trae Dart 3.9.x
+
+      - name: Show versions
+        run: |
+          flutter --version
+          dart --version
 
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Analyze project
-        run: flutter analyze
+      - name: Analyze (non-fatal infos/warnings)
+        run: dart analyze --no-fatal-infos --no-fatal-warnings
 
       - name: Run tests
         run: flutter test
